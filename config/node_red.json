@@ -1,0 +1,522 @@
+[
+    {
+        "id": "ef5aa03bfe85b976",
+        "type": "tab",
+        "label": "smart_home",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "99ddb00e4ee9cee7",
+        "type": "aedes broker",
+        "z": "ef5aa03bfe85b976",
+        "name": "",
+        "mqtt_port": "1881",
+        "mqtt_ws_bind": "port",
+        "mqtt_ws_port": "",
+        "mqtt_ws_path": "",
+        "cert": "",
+        "key": "",
+        "certname": "",
+        "keyname": "",
+        "persistence_bind": "memory",
+        "dburl": "",
+        "usetls": false,
+        "x": 890,
+        "y": 80,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "58b038c923a3db3b",
+        "type": "mqtt in",
+        "z": "ef5aa03bfe85b976",
+        "name": "MQTT sensor data",
+        "topic": "home/sensor/data",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cc6baff87bdbca5b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 40,
+        "wires": [
+            [
+                "a6a3a5c2b7f7208c",
+                "0a2bf190942ec31f"
+            ]
+        ]
+    },
+    {
+        "id": "ba5108608153991d",
+        "type": "mqtt out",
+        "z": "ef5aa03bfe85b976",
+        "name": "MQTT recieve control ",
+        "topic": "home/command",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cc6baff87bdbca5b",
+        "x": 540,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "033524b8b0c040db",
+        "type": "inject",
+        "z": "ef5aa03bfe85b976",
+        "name": "bật quạt",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{     \"device\": \"fan\",\"location\":\"living_room\" , \"status\": \"ON\" }",
+        "payloadType": "json",
+        "x": 140,
+        "y": 180,
+        "wires": [
+            [
+                "77fbb38427767176",
+                "ba5108608153991d"
+            ]
+        ]
+    },
+    {
+        "id": "6932e6ac413786fa",
+        "type": "inject",
+        "z": "ef5aa03bfe85b976",
+        "name": "tắt quạt",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"device\": \"fan\",\"location\":\"living_room\" ,\"status\": \"OFF\"}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "77fbb38427767176",
+                "ba5108608153991d"
+            ]
+        ]
+    },
+    {
+        "id": "5c99b497da7dfc4f",
+        "type": "debug",
+        "z": "ef5aa03bfe85b976",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "6c1fbce6e0c5c63f",
+        "type": "mqtt out",
+        "z": "ef5aa03bfe85b976",
+        "name": "thingsboardRecievedSensor",
+        "topic": "v1/devices/me/telemetry",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt-broker-config",
+        "x": 620,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "a6a3a5c2b7f7208c",
+        "type": "function",
+        "z": "ef5aa03bfe85b976",
+        "name": "ValueSensor",
+        "func": "let temp=msg.payload.temperature;\nlet humi=msg.payload.humidity;\nlet light=msg.payload.light;\nlet gas_level=msg.payload.gas\n// Cấu trúc bắt buộc của ThingsBoard\nmsg.payload = {\n    \"temperature\": temp,\n    \"humidity\": humi,\n    \"gas_level\": gas_level ,\n    \"light\":light\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 40,
+        "wires": [
+            [
+                "6c1fbce6e0c5c63f",
+                "be43bd8942b4f866"
+            ]
+        ]
+    },
+    {
+        "id": "be43bd8942b4f866",
+        "type": "debug",
+        "z": "ef5aa03bfe85b976",
+        "name": "debug sensor",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "d9d49d79bb8b0420",
+        "type": "e-mail",
+        "z": "ef5aa03bfe85b976",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "authtype": "BASIC",
+        "saslformat": false,
+        "token": "oauth2Response.access_token",
+        "secure": true,
+        "tls": false,
+        "name": "huyvo4709@gmail.com",
+        "dname": "send to email",
+        "x": 490,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "ef2dfd243c136250",
+        "type": "mqtt in",
+        "z": "ef5aa03bfe85b976",
+        "name": "",
+        "topic": "smartHome/command",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cc6baff87bdbca5b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 380,
+        "wires": [
+            [
+                "5c99b497da7dfc4f",
+                "ba5108608153991d"
+            ]
+        ]
+    },
+    {
+        "id": "415108826db48470",
+        "type": "inject",
+        "z": "ef5aa03bfe85b976",
+        "name": "Bật đèn",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{     \"device\": \"light\",\"location\":\"bedroom\" , \"status\": \"ON\" }",
+        "payloadType": "json",
+        "x": 130,
+        "y": 260,
+        "wires": [
+            [
+                "77fbb38427767176",
+                "ba5108608153991d"
+            ]
+        ]
+    },
+    {
+        "id": "d7b176936b08136e",
+        "type": "inject",
+        "z": "ef5aa03bfe85b976",
+        "name": "Tắt đèn",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{     \"device\": \"light\",\"location\":\"bedroom\" , \"status\": \"OFF\" }",
+        "payloadType": "json",
+        "x": 130,
+        "y": 300,
+        "wires": [
+            [
+                "77fbb38427767176",
+                "ba5108608153991d"
+            ]
+        ]
+    },
+    {
+        "id": "77fbb38427767176",
+        "type": "debug",
+        "z": "ef5aa03bfe85b976",
+        "name": "debug on/off",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "0b581bf42b869955",
+        "type": "mqtt in",
+        "z": "ef5aa03bfe85b976",
+        "name": "MQTT state device",
+        "topic": "home/status/device",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cc6baff87bdbca5b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 90,
+        "y": 100,
+        "wires": [
+            [
+                "a0fb2a94e48f2e41",
+                "544c40f74ae89ce3"
+            ]
+        ]
+    },
+    {
+        "id": "a0fb2a94e48f2e41",
+        "type": "function",
+        "z": "ef5aa03bfe85b976",
+        "name": "StateDevice",
+        "func": "let fan_status=msg.payload.fan_status;\nlet light_status=msg.payload.light_status;\nmsg.payload={\n    \"fan_status\":fan_status,\n    \"light_status\":light_status\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 80,
+        "wires": [
+            [
+                "6c1fbce6e0c5c63f"
+            ]
+        ]
+    },
+    {
+        "id": "696be0cb740dfe46",
+        "type": "http request",
+        "z": "ef5aa03bfe85b976",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 450,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ce2fd08dea6d306c",
+        "type": "function",
+        "z": "ef5aa03bfe85b976",
+        "name": "ngưỡng MQ2 gửi fastAPI",
+        "func": "let gas_level = Number(msg.payload.gas_level);\nlet last_state = context.get(\"gas_state\") || \"NORMAL\";\n\nlet payload = null;\n\n\nif (gas_level >= 2000 && gas_level < 2500 && last_state !== \"WARNING\") {\n\n    payload = {\n        query: \"Phát hiện rò rỉ khí gas trong nhà\",\n        user_id: \"node_red\",\n        session_id: \"gas_warning\"\n    };\n\n    context.set(\"gas_state\", \"WARNING\");\n}\n\n// ----- NGUY HIỂM -----\nelse if (gas_level >= 2500 && last_state !== \"DANGER\") {\n\n    payload = {\n        query: \"Nguy hiểm! Nồng độ khí gas vượt ngưỡng an toàn. Kích hoạt cảnh báo khẩn cấp\",\n        user_id: \"node_red\",\n        session_id: \"gas_danger\"\n    };\n\n    context.set(\"gas_state\", \"DANGER\");\n\n    msg.payload = {\n        gas_level: gas_level,\n        alert: \"DANGER\",\n        fan: true,\n        speaker: true\n    };\n\n    return [msg, null]; \n}\n\nelse if (gas_level < 2000 && last_state !== \"NORMAL\") {\n    context.set(\"gas_state\", \"NORMAL\");\n}\n\nif (!payload) return null;\n\n// ----- GỬI SANG FASTAPI -----\nmsg.method = \"POST\";\nmsg.url = \"http://localhost:8000/api/chat\";\nmsg.headers = { \"Content-Type\": \"application/json\" };\nmsg.payload = payload;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 520,
+        "wires": [
+            [
+                "696be0cb740dfe46"
+            ]
+        ]
+    },
+    {
+        "id": "0a2bf190942ec31f",
+        "type": "function",
+        "z": "ef5aa03bfe85b976",
+        "name": "Gửi email",
+        "func": "let gas_level = msg.payload.gas;\n\nlet time = msg.payload.time || new Date().toLocaleString(\"vi-VN\");\nif(gas_level>=1500 &&gas_level<4095){\nmsg.topic = \"⚠️ CẢNH BÁO RÒ RỈ KHÍ GAS – SMART HOME\";\n\nmsg.payload = `\n<h2>⚠️ THÔNG BÁO CẢNH BÁO KHÍ GAS</h2>\n\n<p>Kính gửi người dùng,</p>\n\n<p>\nHệ thống <b>Smart Home AI</b> đã phát hiện dấu hiệu \n<b>rò rỉ khí gas</b> trong khu vực giám sát.\n</p>\n\n<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">\n  <tr>\n    <td><b>Mức cảnh báo</b></td>\n    <td>CẢNH BÁO</td>\n  </tr>\n  <tr>\n    <td><b>Nồng độ khí gas</b></td>\n    <td>${gas_level}</td>\n  </tr>\n  <tr>\n    <td><b>Ngưỡng cảnh báo</b></td>\n    <td>2000</td>\n  </tr>\n  <tr>\n    <td><b>Thời gian</b></td>\n    <td>${time}</td>\n  </tr>\n</table>\n\n<p>\n⚠️ Vui lòng kiểm tra khu vực bếp và các thiết bị sử dụng gas.<br>\n⚠️ Đảm bảo thông gió tốt để tránh nguy hiểm.\n</p>\n\n<p style=\"color:gray;font-size:12px\">\nEmail được gửi tự động từ hệ thống Smart Home AI.\n</p>\n`;\nreturn msg;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 460,
+        "wires": [
+            [
+                "d9d49d79bb8b0420"
+            ]
+        ]
+    },
+    {
+        "id": "8ed9d7801c22bfda",
+        "type": "mqtt out",
+        "z": "ef5aa03bfe85b976",
+        "name": "",
+        "topic": "smartHome/sensor/data",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cc6baff87bdbca5b",
+        "x": 590,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "544c40f74ae89ce3",
+        "type": "function",
+        "z": "ef5aa03bfe85b976",
+        "name": "Value and state sensor",
+        "func": "let fan_status=msg.payload.fan_status;\nlet light_status=msg.payload.light_status;\nlet temp=msg.payload.temp;\nlet humi=msg.payload.humi;\nmsg.payload={\n    \"fan_status\":fan_status,\n    \"light_status\":light_status,\n    \"temperature\":temp,\n    \"humidity\":humi \n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "8ed9d7801c22bfda",
+                "3cd05564523ea1ba"
+            ]
+        ]
+    },
+    {
+        "id": "3cd05564523ea1ba",
+        "type": "debug",
+        "z": "ef5aa03bfe85b976",
+        "name": "debug 20",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "cc6baff87bdbca5b",
+        "type": "mqtt-broker",
+        "name": "smart_home_mqtt",
+        "broker": "10.0.18.255",
+        "port": "1881",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "mqtt-broker-config",
+        "type": "mqtt-broker",
+        "name": "MQTT Server",
+        "broker": "10.0.18.255",
+        "port": "1883",
+        "clientid": "NodeRED",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

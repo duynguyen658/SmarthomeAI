@@ -1,0 +1,40 @@
+# Backend & API
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# Google AI & ADK
+google-genai>=0.2.0
+google-adk>=0.1.0
+
+# Environment Variables
+python-dotenv>=1.0.0
+
+# HTTP Requests & Client
+requests>=2.31.0
+httpx>=0.25.0
+
+# MQTT
+paho-mqtt>=1.6.1
+aiomqtt>=2.0.0
+
+# Database & Scheduling
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+apscheduler>=3.10.0
+websockets>=12.0
+
+# State Store (Redis)
+redis>=5.0.0
+
+# Vector DB (Qdrant)
+qdrant-client>=1.7.0
+sentence-transformers>=2.2.0
+
+# Voice & Audio Processing
+pyaudio>=0.2.11
+pvporcupine>=3.0.0
+SpeechRecognition>=3.10.0
+edge-tts>=6.1.0
+pygame>=2.5.0
