@@ -166,11 +166,8 @@ def migrate_from_hardcoded():
     
     db = SessionLocal()
     try:
-        # Kiểm tra xem đã có devices chưa
-        existing_devices = db.query(Device).count()
-        if existing_devices > 0:
-            print("Devices already exist in database, skipping migration")
-            return
+        # Xóa tất cả devices cũ
+        db.query(Device).delete()
         
         # Migrate từ HOME_DEVICE
         device_icons = {

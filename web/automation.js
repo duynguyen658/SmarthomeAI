@@ -1,6 +1,32 @@
 // Automation & Scheduling JavaScript
 const API_BASE = window.location.origin;
 
+// Helper function to show toast
+function showToast(type, message) {
+    const container = document.getElementById('toastContainer');
+    if (!container) {
+        alert(message);
+        return;
+    }
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    const icons = {
+        success: 'ri-check-line',
+        error: 'ri-close-line',
+        warning: 'ri-alert-line',
+        info: 'ri-information-line'
+    };
+    toast.innerHTML = `
+        <div class="toast-icon"><i class="${icons[type]}"></i></div>
+        <span class="toast-message">${message}</span>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.animation = 'toastIn 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
 let schedules = [];
 let devices = [];
 let editingScheduleId = null;
@@ -161,14 +187,14 @@ async function saveSchedule() {
         if (response.ok) {
             resetScheduleForm();
             loadSchedules();
-            alert(scheduleId ? 'Đã cập nhật lịch!' : 'Đã tạo lịch mới!');
+            showToast('success', scheduleId ? 'Đã cập nhật lịch!' : 'Đã tạo lịch mới!');
         } else {
             const error = await response.json();
-            alert(`Lỗi: ${error.detail || 'Không thể lưu lịch'}`);
+            showToast('error', `Lỗi: ${error.detail || 'Không thể lưu lịch'}`);
         }
     } catch (error) {
         console.error('Error saving schedule:', error);
-        alert('Lỗi khi lưu lịch');
+        showToast('error', 'Lỗi khi lưu lịch');
     }
 }
 
@@ -209,13 +235,13 @@ async function deleteSchedule(scheduleId) {
 
         if (response.ok) {
             loadSchedules();
-            alert('Đã xóa lịch!');
+            showToast('success', 'Đã xóa lịch!');
         } else {
-            alert('Lỗi khi xóa lịch');
+            showToast('error', 'Lỗi khi xóa lịch');
         }
     } catch (error) {
         console.error('Error deleting schedule:', error);
-        alert('Lỗi khi xóa lịch');
+        showToast('error', 'Lỗi khi xóa lịch');
     }
 }
 

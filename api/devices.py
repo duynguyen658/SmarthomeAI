@@ -206,9 +206,9 @@ async def control_device(
     
     # Gọi function điều khiển
     if control.action.upper() == 'ON':
-        result = turn_on_device(db_device.device_name, db_device.location)
+        result = turn_on_device(db_device.device_type, db_device.location)
     else:
-        result = turn_off_device(db_device.device_name, db_device.location)
+        result = turn_off_device(db_device.device_type, db_device.location)
     
     # Refresh device status từ database
     db.refresh(db_device)

@@ -29,7 +29,7 @@ This is a **production-grade** smart home system featuring:
 - **Device Management**: Redis-backed state store with comprehensive device registry
 - **Rule Engine**: Powerful automation engine with condition evaluation and action execution
 - **Memory AI**: Vector database (Qdrant) for semantic search and AI learning
-- **Multi-Agent System**: Google ADK with Gemini for intelligent interactions
+- **Local AI**: Ollama with Mistral for offline, private AI interactions
 
 ## Features
 
@@ -219,6 +219,7 @@ Built with Google ADK and Gemini 2.5 Flash:
 - **Redis** (optional, for state store)
 - **Qdrant** (optional, for memory AI)
 - **MQTT Broker** (e.g., Mosquitto)
+- **Ollama** (for local AI - Mistral model)
 
 ### Step 1: Clone Repository
 
@@ -254,8 +255,37 @@ pip install -r requirements.txt
 - `redis` - Redis client
 - `qdrant-client` - Vector database
 - `sentence-transformers` - Embeddings
-- `google-adk` - Agent framework
+- `ollama` - Local AI client
+- `httpx` - HTTP client for Ollama
 - `pydantic-settings` - Configuration
+
+### Step 3.5: Install Ollama (Local AI)
+
+**Windows:**
+1. Download Ollama from https://ollama.com/download
+2. Install and run Ollama
+3. Pull Mistral model:
+
+```powershell
+ollama pull mistral
+```
+
+**Linux/Mac:**
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull mistral
+```
+
+**Verify Ollama is running:**
+```bash
+ollama list
+# Should show: mistral
+```
+
+**Start Ollama server (if not running):**
+```bash
+ollama serve
+```
 
 ### Step 4: Setup Services (Docker Recommended)
 
@@ -292,30 +322,41 @@ python database.py
 ```
 
 ### Step 6: Configure Environment
-## Configuration
 
 Create `.env` in project root:
 
 ```env
-# Google Gemini API
-GOOGLE_API_KEY=your_gemini_api_key_here
+# ============================================
+# LOCAL AI (Ollama) - PRIMARY
+# ============================================
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=mistral
+OLLAMA_TIMEOUT=120
 
+# ============================================
 # PostgreSQL Database
+# ============================================
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=smarthome
 DB_USER=postgres
 DB_PASSWORD=your_password
 
+# ============================================
 # Redis (State Store)
+# ============================================
 REDIS_HOST=localhost
 REDIS_PORT=6379
 
+# ============================================
 # Qdrant (Vector Store)
+# ============================================
 QDRANT_HOST=localhost
 QDRANT_PORT=6333
 
+# ============================================
 # MQTT Broker
+# ============================================
 MQTT_BROKER=localhost
 MQTT_PORT=1883
 MQTT_CLIENT_ID=smarthome_backend

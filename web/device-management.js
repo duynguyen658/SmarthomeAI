@@ -1,6 +1,32 @@
 // Device Management JavaScript
 const API_BASE = window.location.origin;
 
+// Helper function to show toast
+function showToast(type, message) {
+    const container = document.getElementById('toastContainer');
+    if (!container) {
+        alert(message);
+        return;
+    }
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    const icons = {
+        success: 'ri-check-line',
+        error: 'ri-close-line',
+        warning: 'ri-alert-line',
+        info: 'ri-information-line'
+    };
+    toast.innerHTML = `
+        <div class="toast-icon"><i class="${icons[type]}"></i></div>
+        <span class="toast-message">${message}</span>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.animation = 'toastIn 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
 let devices = [];
 let editingDeviceId = null;
 let formInitialized = false; // Flag để tránh đăng ký event listener nhiều lần
@@ -181,7 +207,7 @@ async function saveDevice() {
         if (response.ok) {
             resetDeviceForm();
             await loadDevices();
-            alert('Đã thêm thiết bị mới!');
+            showToast('success', 'Đã thêm thiết bị mới!');
         } else {
             const error = await response.json();
             let errorMessage = 'Lỗi khi lưu thiết bị';
@@ -213,7 +239,7 @@ async function saveDevice() {
         }
     } catch (error) {
         console.error('Error saving device:', error);
-        alert('Lỗi khi lưu thiết bị');
+        showToast('error', 'Lỗi khi lưu thiết bị');
     } finally {
         isProcessing = false;
     }
@@ -254,7 +280,7 @@ async function updateDevice() {
         if (response.ok) {
             resetEditDeviceForm();
             await loadDevices();
-            alert('Đã cập nhật thiết bị!');
+            showToast('success', 'Đã cập nhật thiết bị!');
             // Quay lại trang quản lý thiết bị
             if (typeof switchSection === 'function') {
                 switchSection('device-management');
@@ -271,11 +297,11 @@ async function updateDevice() {
                 }
             }
             
-            alert(`Lỗi: ${errorMessage}`);
+            showToast('error', errorMessage);
         }
     } catch (error) {
         console.error('Error updating device:', error);
-        alert('Lỗi khi cập nhật thiết bị');
+        showToast('error', 'Lỗi khi cập nhật thiết bị');
     } finally {
         isProcessing = false;
     }
@@ -335,13 +361,13 @@ async function deleteDevice(deviceId) {
 
         if (response.ok) {
             await loadDevices();
-            alert('Đã xóa thiết bị!');
+            showToast('success', 'Đã xóa thiết bị!');
         } else {
-            alert('Lỗi khi xóa thiết bị');
+            showToast('error', 'Lỗi khi xóa thiết bị');
         }
     } catch (error) {
         console.error('Error deleting device:', error);
-        alert('Lỗi khi xóa thiết bị');
+        showToast('error', 'Lỗi khi xóa thiết bị');
     } finally {
         isProcessing = false;
     }
@@ -358,12 +384,13 @@ async function controlDevice(deviceId, action) {
 
         if (response.ok) {
             loadDevices();
+            showToast('success', `Đã ${action === 'ON' ? 'bật' : 'tắt'} thiết bị`);
         } else {
-            alert('Lỗi khi điều khiển thiết bị');
+            showToast('error', 'Lỗi khi điều khiển thiết bị');
         }
     } catch (error) {
         console.error('Error controlling device:', error);
-        alert('Lỗi khi điều khiển thiết bị');
+        showToast('error', 'Lỗi khi điều khiển thiết bị');
     }
 }
 

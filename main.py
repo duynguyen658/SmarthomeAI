@@ -5,28 +5,19 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
-from google.adk.sessions import InMemorySessionService
-from google.adk.runners import Runner
-from google.genai import types
 from dotenv import load_dotenv
 import os
 
 
 load_dotenv()
-from smart_home.agent import root_agent
+from smart_home.agent_ollama import call_agent, check_ollama_status
 from database import init_db, migrate_from_hardcoded
 from scheduler import start_scheduler, stop_scheduler
-from notification_service import start_notification_service
 
-APP_NAME = "agents"
-
-session_service = None
-runner = None
 #------vòng đời-----
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Đang khởi động Smart Home API...")
-    global session_service, runner
     
     # Initialize database
     print("Initializing database...")
@@ -39,18 +30,20 @@ async def lifespan(app: FastAPI):
     
     # Start notification service
     print("Starting notification service...")
-    # Create background task for notification monitoring
     import asyncio
     from notification_service import check_alerts
     asyncio.create_task(check_alerts())
     
-    # Initialize AI agent
-    session_service = InMemorySessionService()
-    runner = Runner(
-        agent=root_agent,
-        app_name=APP_NAME,
-        session_service=session_service
-    )
+    # Check Ollama connection
+    print("Checking Ollama connection...")
+    status = await check_ollama_status()
+    if status["connected"]:
+        print(f"✅ Ollama connected: {status['model']}")
+        print(f"   Available models: {status['available_models']}")
+    else:
+        print("⚠️ Ollama not connected. Please ensure Ollama is running.")
+        print("   Install Ollama: https://ollama.com/download")
+        print("   Then run: ollama pull mistral")
     
     yield
     
@@ -59,7 +52,7 @@ async def lifespan(app: FastAPI):
     stop_scheduler()
     print("Services stopped")
 
-app = FastAPI(title="Smart Home AI Agent", lifespan=lifespan)
+app = FastAPI(title="Smart Home AI (Ollama)", lifespan=lifespan)
 router = APIRouter()
 
 # Serve static files from web directory
@@ -78,55 +71,43 @@ class ChatResponse(BaseModel):
 # --- API ENDPOINT ---
 @router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
-    global session_service, runner
-
     user_id = request.user_id if request.user_id else str(uuid.uuid4())
     session_id = request.session_id if request.session_id else str(uuid.uuid4())
     
     print(f" Request: '{request.query}' | User: {user_id} | Session: {session_id}")
 
     try:
-        try:
-            await session_service.create_session(
-                app_name=APP_NAME,
-                user_id=user_id,
-                session_id=session_id
-            )
-        except Exception:
-            pass
-        # 3. Chạy Agent
-        user_message = types.Content(
-            role="user", 
-            parts=[types.Part.from_text(text=request.query)]
-        )
-        final_response_text = "Xin lỗi, tôi không nghe rõ."
-        async for event in runner.run_async(
-            user_id=user_id, 
-            session_id=session_id, 
-            new_message=user_message
-        ):
-            if event.is_final_response():
-                if event.content and event.content.parts:
-                    final_response_text = event.content.parts[0].text
-        print(f"Response: {final_response_text}")
+        # Gọi Ollama Agent
+        response_text = await call_agent(request.query)
+        print(f"Response: {response_text}")
+        
         return ChatResponse(
-            response=final_response_text,
-            user_id=user_id,     # Trả lại ID để Client lưu cho lần sau
+            response=response_text,
+            user_id=user_id,
             session_id=session_id
         )
     except Exception as e:
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Lỗi hệ thống: {str(e)}")
+
+# --- Status Endpoint ---
+@router.get("/status/ollama")
+async def get_ollama_status():
+    """Kiểm tra trạng thái Ollama"""
+    status = await check_ollama_status()
+    return status
+
 # Gắn routers vào app
 app.include_router(router, prefix="/api", tags=["SmartHome Chat"])
 
 # Include new API routers
-from api import devices, schedules, alerts, rules
+from api import devices, schedules, alerts, rules, sensors
 app.include_router(devices.router, prefix="/api")
 app.include_router(schedules.router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
 app.include_router(rules.router, prefix="/api")
+app.include_router(sensors.router, prefix="/api")
 
 # Serve static files AFTER API routes (to avoid catching /api/* paths)
 if os.path.exists(web_dir):

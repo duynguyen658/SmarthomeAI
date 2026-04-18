@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Home AI Assistant</title>
+    <title>Smart Home AI</title>
     <link rel="stylesheet" href="/assets/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
@@ -15,43 +16,40 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-icon"></div>
-                    <h1 class="logo-text">SmartHome</h1>
+                    <div class="logo-icon">
+                        <i class="ri-home-smile-line"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">SmartHome</span>
+                        <span class="logo-subtitle">AI Assistant</span>
+                    </div>
                 </div>
             </div>
             
             <nav class="sidebar-nav">
                 <a href="#dashboard" class="nav-item active" data-section="dashboard">
-                    <span class="nav-icon"></span>
+                    <i class="ri-dashboard-line nav-icon"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
                 <a href="#chat" class="nav-item" data-section="chat">
-                    <span class="nav-icon"></span>
-                    <span class="nav-text">AI Chat</span>
+                    <i class="ri-chat-3-line nav-icon"></i>
+                    <span class="nav-text">AI Assistant</span>
                 </a>
                 <a href="#devices" class="nav-item" data-section="devices">
-                    <span class="nav-icon"></span>
+                    <i class="ri-lightbulb-line nav-icon"></i>
                     <span class="nav-text">Thiết Bị</span>
                 </a>
                 <a href="#device-management" class="nav-item" data-section="device-management">
-                    <span class="nav-icon"></span>
-                    <span class="nav-text">Quản Lý Thiết Bị</span>
-                </a>
-                <a href="#edit-device" class="nav-item" data-section="edit-device">
-                    <span class="nav-icon"></span>
-                    <span class="nav-text">Chỉnh Sửa Thiết Bị</span>
+                    <i class="ri-settings-3-line nav-icon"></i>
+                    <span class="nav-text">Quản Lý</span>
                 </a>
                 <a href="#automation" class="nav-item" data-section="automation">
-                    <span class="nav-icon"></span>
+                    <i class="ri-time-line nav-icon"></i>
                     <span class="nav-text">Tự Động Hóa</span>
                 </a>
                 <a href="#alerts" class="nav-item" data-section="alerts">
-                    <span class="nav-icon"></span>
+                    <i class="ri-notification-3-line nav-icon"></i>
                     <span class="nav-text">Cảnh Báo</span>
-                </a>
-                <a href="#settings" class="nav-item" data-section="settings">
-                    <span class="nav-icon"></span>
-                    <span class="nav-text">Cài Đặt</span>
                 </a>
             </nav>
 
@@ -61,7 +59,7 @@
                     <span class="status-text" id="serverStatusText">Đang kết nối...</span>
                 </div>
                 <button class="theme-toggle" id="themeToggle">
-                    <span></span>
+                    <i class="ri-sun-line"></i>
                 </button>
             </div>
         </aside>
@@ -71,107 +69,165 @@
             <!-- Dashboard Section -->
             <section id="dashboard" class="content-section active">
                 <div class="section-header">
-                    <h2>Dashboard</h2>
-                    <p class="section-subtitle">Tổng quan hệ thống nhà thông minh</p>
+                    <div class="header-content">
+                        <h2>Xin chào, Chủ nhà!</h2>
+                        <p class="section-subtitle">Tổng quan hệ thống nhà thông minh của bạn</p>
+                    </div>
+                    <div class="header-time" id="currentTime"></div>
                 </div>
 
                 <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-icon temperature"></div>
+                    <div class="metric-card temperature">
+                        <div class="metric-glow"></div>
+                        <div class="metric-icon-wrapper">
+                            <i class="ri-temp-hot-line"></i>
+                        </div>
                         <div class="metric-info">
-                            <h3 class="metric-label">Nhiệt Độ</h3>
-                            <p class="metric-value" id="temperature">--°C</p>
-                            <span class="metric-status">Bình thường</span>
+                            <span class="metric-label">Nhiệt Độ</span>
+                            <span class="metric-value" id="temperature">--°C</span>
+                            <span class="metric-status" id="tempStatus">Đang cập nhật...</span>
                         </div>
                     </div>
 
-                    <div class="metric-card">
-                        <div class="metric-icon humidity"></div>
+                    <div class="metric-card humidity">
+                        <div class="metric-glow"></div>
+                        <div class="metric-icon-wrapper">
+                            <i class="ri-water-percent-line"></i>
+                        </div>
                         <div class="metric-info">
-                            <h3 class="metric-label">Độ Ẩm</h3>
-                            <p class="metric-value" id="humidity">--%</p>
-                            <span class="metric-status">Tốt</span>
+                            <span class="metric-label">Độ Ẩm</span>
+                            <span class="metric-value" id="humidity">--%</span>
+                            <span class="metric-status" id="humidStatus">Đang cập nhật...</span>
                         </div>
                     </div>
 
-                    <div class="metric-card">
-                        <div class="metric-icon light"></div>
+                    <div class="metric-card gas">
+                        <div class="metric-glow"></div>
+                        <div class="metric-icon-wrapper">
+                            <i class="ri-fire-line"></i>
+                        </div>
                         <div class="metric-info">
-                            <h3 class="metric-label">Ánh Sáng</h3>
-                            <p class="metric-value" id="light">--</p>
-                            <span class="metric-status">--</span>
+                            <span class="metric-label">MQ2 Gas</span>
+                            <span class="metric-value" id="gas">-- PPM</span>
+                            <span class="metric-status" id="gasStatus">Đang cập nhật...</span>
                         </div>
                     </div>
 
-                    <div class="metric-card">
-                        <div class="metric-icon gas"></div>
+                    <div class="metric-card devices-active">
+                        <div class="metric-glow"></div>
+                        <div class="metric-icon-wrapper">
+                            <i class="ri-device-line"></i>
+                        </div>
                         <div class="metric-info">
-                            <h3 class="metric-label">Không Khí</h3>
-                            <p class="metric-value" id="gas">--</p>
-                            <span class="metric-status">--</span>
+                            <span class="metric-label">Thiết Bị</span>
+                            <span class="metric-value"><span id="activeDevices">0</span>/<span id="totalDevices">0</span></span>
+                            <span class="metric-status">Đang hoạt động</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="devices-overview">
-                    <h3>Trạng Thái Thiết Bị</h3>
-                    <div class="devices-grid">
-                        <div class="device-card">
-                            <div class="device-header">
-                                <span class="device-icon"></span>
-                                <h4>Đèn Phòng Khách</h4>
-                            </div>
-                            <div class="device-status" id="lightStatus">
-                                <span class="status-badge off">TẮT</span>
+                <div class="dashboard-grid">
+                    <div class="devices-overview">
+                        <div class="panel-header">
+                            <h3><i class="ri-home-gear-line"></i> Trạng Thái Thiết Bị</h3>
+                            <button class="refresh-btn" onclick="loadDashboardDevices()">
+                                <i class="ri-refresh-line"></i>
+                            </button>
+                        </div>
+                        <div class="devices-grid" id="dashboardDevices">
+                            <!-- Devices will be loaded here -->
+                            <div class="empty-state">
+                                <i class="ri-robot-line"></i>
+                                <p>Đang tải thiết bị...</p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="device-card">
-                            <div class="device-header">
-                                <span class="device-icon"></span>
-                                <h4>Quạt Phòng Ngủ</h4>
-                            </div>
-                            <div class="device-status" id="fanStatus">
-                                <span class="status-badge off">TẮT</span>
-                            </div>
+                    <div class="quick-actions-panel">
+                        <div class="panel-header">
+                            <h3><i class="ri-flashlight-line"></i> Điều Khiển Nhanh</h3>
+                        </div>
+                        <div class="quick-toggles">
+                            <button class="quick-toggle-btn" onclick="quickControl('light', 'all', 'on')">
+                                <i class="ri-lightbulb-line"></i>
+                                <span>Bật Tất Cả Đèn</span>
+                            </button>
+                            <button class="quick-toggle-btn" onclick="quickControl('light', 'all', 'off')">
+                                <i class="ri-lightbulb-fill"></i>
+                                <span>Tắt Tất Cả Đèn</span>
+                            </button>
+                            <button class="quick-toggle-btn" onclick="quickControl('fan', 'all', 'on')">
+                                <i class="ri-windy-line"></i>
+                                <span>Bật Tất Cả Quạt</span>
+                            </button>
+                            <button class="quick-toggle-btn" onclick="quickControl('fan', 'all', 'off')">
+                                <i class="ri-airplane-line"></i>
+                                <span>Tắt Tất Cả Quạt</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Chat Section -->
+            <!-- Chat Section with Voice -->
             <section id="chat" class="content-section">
                 <div class="section-header">
-                    <h2>AI Assistant</h2>
-                    <p class="section-subtitle">Trò chuyện với trợ lý thông minh</p>
+                    <div class="header-content">
+                        <h2>AI Assistant</h2>
+                        <p class="section-subtitle">Trò chuyện hoặc nói để điều khiển nhà thông minh</p>
+                    </div>
                 </div>
 
                 <div class="chat-container">
                     <div class="chat-messages" id="chatMessages">
                         <div class="message assistant">
-                            <div class="message-avatar"></div>
+                            <div class="message-avatar">
+                                <i class="ri-robot-line"></i>
+                            </div>
                             <div class="message-content">
-                                <p>Xin chào! Em là trợ lý ảo nhà thông minh. Anh cần em giúp gì không ạ?</p>
+                                <p>Xin chào! Em là trợ lý ảo nhà thông minh. Anh có thể:</p>
+                                <ul class="assistant-hints">
+                                    <li>Nói "Bật đèn phòng khách"</li>
+                                    <li>Hỏi "Nhiệt độ bao nhiêu?"</li>
+                                    <li>Yêu cầu "Gợi ý món ăn tối nay"</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
 
                     <div class="chat-input-container">
-                        <div class="quick-actions">
-                            <button class="quick-btn" data-query="Bật đèn phòng khách">Bật Đèn</button>
-                            <button class="quick-btn" data-query="Tắt quạt phòng ngủ">Tắt Quạt</button>
-                            <button class="quick-btn" data-query="Nhiệt độ trong nhà là bao nhiêu?">Nhiệt Độ</button>
-                            <button class="quick-btn" data-query="Thời tiết Hà Nội hôm nay">Thời Tiết</button>
+                        <div class="input-actions">
+                            <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">
+                                <i class="ri-mic-line" id="voiceIcon"></i>
+                                <span id="voiceLabel">Giọng nói</span>
+                                <div class="voice-waves" id="voiceWaves">
+                                    <span></span><span></span><span></span><span></span><span></span>
+                                </div>
+                            </button>
                         </div>
                         <div class="input-wrapper">
                             <input 
                                 type="text" 
                                 id="chatInput" 
-                                placeholder="Nhập lệnh hoặc hỏi gì đó... (Ví dụ: Nhà nóng quá)"
+                                placeholder="Nhập lệnh hoặc nói để điều khiển..."
                                 autocomplete="off"
                             >
                             <button id="sendButton" class="send-btn">
-                                <span></span>
+                                <i class="ri-send-plane-fill"></i>
+                            </button>
+                        </div>
+                        <div class="quick-commands">
+                            <button class="quick-cmd" data-query="Bật đèn phòng khách">
+                                <i class="ri-lightbulb-line"></i> Bật đèn
+                            </button>
+                            <button class="quick-cmd" data-query="Tắt quạt">
+                                <i class="ri-airplane-line"></i> Tắt quạt
+                            </button>
+                            <button class="quick-cmd" data-query="Nhiệt độ trong nhà">
+                                <i class="ri-temp-hot-line"></i> Nhiệt độ
+                            </button>
+                            <button class="quick-cmd" data-query="Thời tiết hôm nay">
+                                <i class="ri-sun-line"></i> Thời tiết
                             </button>
                         </div>
                     </div>
@@ -181,61 +237,29 @@
             <!-- Devices Section -->
             <section id="devices" class="content-section">
                 <div class="section-header">
-                    <h2>Điều Khiển Thiết Bị</h2>
-                    <p class="section-subtitle">Quản lý và điều khiển các thiết bị trong nhà</p>
+                    <div class="header-content">
+                        <h2>Điều Khiển Thiết Bị</h2>
+                        <p class="section-subtitle">Bật/tắt thiết bị trong nhà</p>
+                    </div>
                 </div>
 
-                <div class="control-panel">
-                    <div class="control-card">
-                        <div class="control-header">
-                            <span class="control-icon"></span>
-                            <h3>Đèn Phòng Khách</h3>
-                        </div>
-                        <div class="control-actions">
-                            <button class="control-btn on" data-device="đèn" data-location="phòng khách" data-action="on">
-                                BẬT
-                            </button>
-                            <button class="control-btn off" data-device="đèn" data-location="phòng khách" data-action="off">
-                                TẮT
-                            </button>
-                        </div>
-                        <div class="control-status">
-                            <span>Trạng thái: </span>
-                            <span id="lightControlStatus">TẮT</span>
-                        </div>
-                    </div>
-
-                    <div class="control-card">
-                        <div class="control-header">
-                            <span class="control-icon"></span>
-                            <h3>Quạt Phòng Ngủ</h3>
-                        </div>
-                        <div class="control-actions">
-                            <button class="control-btn on" data-device="quạt" data-location="phòng ngủ" data-action="on">
-                                BẬT
-                            </button>
-                            <button class="control-btn off" data-device="quạt" data-location="phòng ngủ" data-action="off">
-                                TẮT
-                            </button>
-                        </div>
-                        <div class="control-status">
-                            <span>Trạng thái: </span>
-                            <span id="fanControlStatus">TẮT</span>
-                        </div>
-                    </div>
+                <div class="control-panel" id="controlPanel">
+                    <!-- Devices will be loaded here -->
                 </div>
             </section>
 
             <!-- Device Management Section -->
             <section id="device-management" class="content-section">
                 <div class="section-header">
-                    <h2>Quản Lý Thiết Bị</h2>
-                    <p class="section-subtitle">Thêm, sửa, xóa và quản lý thiết bị trong nhà</p>
+                    <div class="header-content">
+                        <h2>Quản Lý Thiết Bị</h2>
+                        <p class="section-subtitle">Thêm, sửa, xóa thiết bị trong nhà</p>
+                    </div>
                 </div>
 
                 <div class="device-management-container">
                     <div class="device-form-container">
-                        <h3>Thêm Thiết Bị Mới</h3>
+                        <h3><i class="ri-add-circle-line"></i> Thêm Thiết Bị Mới</h3>
                         <form id="deviceForm" class="device-form">
                             <div class="form-group">
                                 <label>Tên Thiết Bị</label>
@@ -244,11 +268,11 @@
                             <div class="form-group">
                                 <label>Loại Thiết Bị</label>
                                 <select id="deviceType" required>
-                                    <option value="light">Đèn</option>
-                                    <option value="fan">Quạt</option>
-                                    <option value="sensor">Cảm Biến</option>
-                                    <option value="switch">Công Tắc</option>
-                                    <option value="thermostat">Điều Hòa</option>
+                                    <option value="light">💡 Đèn</option>
+                                    <option value="fan">🌀 Quạt</option>
+                                    <option value="sensor">📊 Cảm Biến</option>
+                                    <option value="switch">🔌 Công Tắc</option>
+                                    <option value="ac">❄️ Điều Hòa</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -257,23 +281,17 @@
                             </div>
                             <div class="form-group">
                                 <label>MAC Address</label>
-                                <input type="text" id="deviceMacAddress" placeholder="Ví dụ: AA:BB:CC:DD:EE:FF">
-                                <small class="form-hint">Địa chỉ MAC của thiết bị (tùy chọn, phải là duy nhất)</small>
-                            </div>
-                            <div class="form-group">
-                                <label>MQTT Topic</label>
-                                <input type="text" id="deviceMqttTopic" placeholder="Ví dụ: home/device/light/living_room">
-                                <small class="form-hint">Topic MQTT để điều khiển thiết bị (tùy chọn)</small>
+                                <input type="text" id="deviceMacAddress" placeholder="AA:BB:CC:DD:EE:FF">
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="save-btn">Lưu</button>
-                                <button type="button" class="cancel-btn" id="cancelDeviceForm">Hủy</button>
+                                <button type="submit" class="save-btn"><i class="ri-save-line"></i> Lưu</button>
+                                <button type="button" class="cancel-btn" id="cancelDeviceForm"><i class="ri-close-line"></i> Hủy</button>
                             </div>
                         </form>
                     </div>
 
                     <div class="devices-list-container">
-                        <h3>Danh Sách Thiết Bị</h3>
+                        <h3><i class="ri-list-check"></i> Danh Sách Thiết Bị</h3>
                         <div id="devicesList" class="devices-list">
                             <!-- Devices will be loaded here -->
                         </div>
@@ -281,64 +299,18 @@
                 </div>
             </section>
 
-            <!-- Edit Device Section -->
-            <section id="edit-device" class="content-section">
-                <div class="section-header">
-                    <h2>Chỉnh Sửa Thiết Bị</h2>
-                    <p class="section-subtitle">Cập nhật thông tin thiết bị</p>
-                </div>
-
-                <div class="device-edit-container">
-                    <div class="device-edit-form-container">
-                        <form id="deviceEditForm" class="device-form">
-                            <input type="hidden" id="editDeviceId">
-                            <div class="form-group">
-                                <label>Tên Thiết Bị</label>
-                                <input type="text" id="editDeviceName" required placeholder="Ví dụ: Đèn phòng khách">
-                            </div>
-                            <div class="form-group">
-                                <label>Loại Thiết Bị</label>
-                                <select id="editDeviceType" required>
-                                    <option value="light">Đèn</option>
-                                    <option value="fan">Quạt</option>
-                                    <option value="sensor">Cảm Biến</option>
-                                    <option value="switch">Công Tắc</option>
-                                    <option value="thermostat">Điều Hòa</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Vị Trí</label>
-                                <input type="text" id="editDeviceLocation" required placeholder="Ví dụ: Phòng khách">
-                            </div>
-                            <div class="form-group">
-                                <label>MAC Address</label>
-                                <input type="text" id="editDeviceMacAddress" placeholder="Ví dụ: AA:BB:CC:DD:EE:FF">
-                                <small class="form-hint">Địa chỉ MAC của thiết bị (tùy chọn, phải là duy nhất)</small>
-                            </div>
-                            <div class="form-group">
-                                <label>MQTT Topic</label>
-                                <input type="text" id="editDeviceMqttTopic" placeholder="Ví dụ: home/device/light/living_room">
-                                <small class="form-hint">Topic MQTT để điều khiển thiết bị (tùy chọn)</small>
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="save-btn">Cập Nhật</button>
-                                <button type="button" class="cancel-btn" id="cancelEditDeviceForm">Hủy</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
             <!-- Automation Section -->
             <section id="automation" class="content-section">
                 <div class="section-header">
-                    <h2>Tự Động Hóa</h2>
-                    <p class="section-subtitle">Lên lịch tự động điều khiển thiết bị</p>
+                    <div class="header-content">
+                        <h2>Tự Động Hóa</h2>
+                        <p class="section-subtitle">Lên lịch điều khiển thiết bị tự động</p>
+                    </div>
                 </div>
 
                 <div class="automation-container">
                     <div class="schedule-form-container">
-                        <h3 id="scheduleFormTitle">Tạo Lịch Mới</h3>
+                        <h3 id="scheduleFormTitle"><i class="ri-calendar-line"></i> Tạo Lịch Mới</h3>
                         <form id="scheduleForm" class="schedule-form">
                             <input type="hidden" id="scheduleId">
                             <div class="form-group">
@@ -354,8 +326,8 @@
                             <div class="form-group">
                                 <label>Hành Động</label>
                                 <select id="scheduleAction" required>
-                                    <option value="ON">Bật</option>
-                                    <option value="OFF">Tắt</option>
+                                    <option value="ON">🔛 Bật</option>
+                                    <option value="OFF">⭕ Tắt</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -365,25 +337,24 @@
                             <div class="form-group">
                                 <label>Ngày Trong Tuần</label>
                                 <div class="days-checkbox-group">
-                                    <label><input type="checkbox" value="monday"> Thứ 2</label>
-                                    <label><input type="checkbox" value="tuesday"> Thứ 3</label>
-                                    <label><input type="checkbox" value="wednesday"> Thứ 4</label>
-                                    <label><input type="checkbox" value="thursday"> Thứ 5</label>
-                                    <label><input type="checkbox" value="friday"> Thứ 6</label>
-                                    <label><input type="checkbox" value="saturday"> Thứ 7</label>
-                                    <label><input type="checkbox" value="sunday"> Chủ Nhật</label>
+                                    <label><input type="checkbox" value="monday"> T2</label>
+                                    <label><input type="checkbox" value="tuesday"> T3</label>
+                                    <label><input type="checkbox" value="wednesday"> T4</label>
+                                    <label><input type="checkbox" value="thursday"> T5</label>
+                                    <label><input type="checkbox" value="friday"> T6</label>
+                                    <label><input type="checkbox" value="saturday"> T7</label>
+                                    <label><input type="checkbox" value="sunday"> CN</label>
                                 </div>
-                                <small>Để trống để chạy mỗi ngày</small>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="save-btn">Lưu</button>
-                                <button type="button" class="cancel-btn" id="cancelScheduleForm">Hủy</button>
+                                <button type="submit" class="save-btn"><i class="ri-save-line"></i> Lưu</button>
+                                <button type="button" class="cancel-btn" id="cancelScheduleForm"><i class="ri-close-line"></i> Hủy</button>
                             </div>
                         </form>
                     </div>
 
                     <div class="schedules-list-container">
-                        <h3>Lịch Đã Tạo</h3>
+                        <h3><i class="ri-time-line"></i> Lịch Đã Tạo</h3>
                         <div id="schedulesList" class="schedules-list">
                             <!-- Schedules will be loaded here -->
                         </div>
@@ -394,26 +365,27 @@
             <!-- Alerts Section -->
             <section id="alerts" class="content-section">
                 <div class="section-header">
-                    <h2>Cảnh Báo</h2>
-                    <p class="section-subtitle">Cấu hình quy tắc cảnh báo và xem thông báo</p>
+                    <div class="header-content">
+                        <h2>Cảnh Báo</h2>
+                        <p class="section-subtitle">Cấu hình cảnh báo và xem thông báo</p>
+                    </div>
                 </div>
 
                 <div class="alerts-container">
                     <div class="alert-rule-form-container">
-                        <h3 id="alertRuleFormTitle">Tạo Quy Tắc Cảnh Báo</h3>
+                        <h3 id="alertRuleFormTitle"><i class="ri-alarm-warning-line"></i> Tạo Quy Tắc Cảnh Báo</h3>
                         <form id="alertRuleForm" class="alert-rule-form">
                             <input type="hidden" id="alertRuleId">
                             <div class="form-group">
                                 <label>Tên Quy Tắc</label>
-                                <input type="text" id="alertRuleName" required placeholder="Ví dụ: Nhiệt độ cao">
+                                <input type="text" id="alertRuleName" required placeholder="Ví dụ: Cảnh báo gas">
                             </div>
                             <div class="form-group">
                                 <label>Loại Cảm Biến</label>
                                 <select id="alertSensorType" required>
-                                    <option value="temperature">Nhiệt Độ</option>
-                                    <option value="humidity">Độ Ẩm</option>
-                                    <option value="gas">Khí Gas</option>
-                                    <option value="light">Ánh Sáng</option>
+                                    <option value="temperature">🌡️ Nhiệt Độ</option>
+                                    <option value="humidity">💧 Độ Ẩm</option>
+                                    <option value="gas">🔥 Khí Gas (MQ2)</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -430,26 +402,26 @@
                                 <input type="number" id="alertThreshold" step="0.1" required>
                             </div>
                             <div class="form-group" id="alertThresholdMaxGroup" style="display: none;">
-                                <label>Ngưỡng Tối Đa (cho điều kiện "Trong khoảng")</label>
+                                <label>Ngưỡng Tối Đa</label>
                                 <input type="number" id="alertThresholdMax" step="0.1">
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="save-btn">Lưu</button>
-                                <button type="button" class="cancel-btn" id="cancelAlertRuleForm">Hủy</button>
+                                <button type="submit" class="save-btn"><i class="ri-save-line"></i> Lưu</button>
+                                <button type="button" class="cancel-btn" id="cancelAlertRuleForm"><i class="ri-close-line"></i> Hủy</button>
                             </div>
                         </form>
                     </div>
 
                     <div class="alerts-content">
                         <div class="alert-rules-list-container">
-                            <h3>Quy Tắc Cảnh Báo</h3>
+                            <h3><i class="ri-file-list-3-line"></i> Quy Tắc Cảnh Báo</h3>
                             <div id="alertRulesList" class="alert-rules-list">
                                 <!-- Alert rules will be loaded here -->
                             </div>
                         </div>
 
                         <div class="notifications-panel-container">
-                            <h3>Thông Báo</h3>
+                            <h3><i class="ri-notification-3-line"></i> Thông Báo</h3>
                             <div id="notificationsPanel" class="notifications-panel">
                                 <!-- Notifications will be loaded here -->
                             </div>
@@ -457,51 +429,11 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Settings Section -->
-            <section id="settings" class="content-section">
-                <div class="section-header">
-                    <h2>Cài Đặt</h2>
-                    <p class="section-subtitle">Cấu hình hệ thống</p>
-                </div>
-
-                <div class="settings-container">
-                    <div class="setting-group">
-                        <h3>Kết Nối</h3>
-                        <div class="setting-item">
-                            <label>API Server</label>
-                            <input type="text" id="apiUrl" value="http://localhost:8000/api/chat" class="setting-input">
-                        </div>
-                        <div class="setting-item">
-                            <label>User ID</label>
-                            <input type="text" id="userId" value="admin_user" class="setting-input">
-                        </div>
-                        <div class="setting-item">
-                            <label>Session ID</label>
-                            <input type="text" id="sessionId" value="session_web_01" class="setting-input">
-                        </div>
-                    </div>
-
-                    <div class="setting-group">
-                        <h3>Giao Diện</h3>
-                        <div class="setting-item">
-                            <label>Chế Độ</label>
-                            <select id="themeSelect" class="setting-input">
-                                <option value="light">Sáng</option>
-                                <option value="dark">Tối</option>
-                                <option value="auto">Tự Động</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="setting-actions">
-                        <button class="save-btn" id="saveSettings">Lưu Cài Đặt</button>
-                        <button class="reset-btn" id="resetSettings">Đặt Lại</button>
-                    </div>
-                </div>
-            </section>
         </main>
     </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script src="/assets/app.js"></script>
     <script src="/assets/device-management.js"></script>
@@ -510,4 +442,3 @@
     <script src="/assets/notifications.js"></script>
 </body>
 </html>
-

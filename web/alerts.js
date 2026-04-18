@@ -1,6 +1,32 @@
 // Alerts JavaScript
 const API_BASE = window.location.origin;
 
+// Helper function to show toast
+function showToast(type, message) {
+    const container = document.getElementById('toastContainer');
+    if (!container) {
+        alert(message);
+        return;
+    }
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    const icons = {
+        success: 'ri-check-line',
+        error: 'ri-close-line',
+        warning: 'ri-alert-line',
+        info: 'ri-information-line'
+    };
+    toast.innerHTML = `
+        <div class="toast-icon"><i class="${icons[type]}"></i></div>
+        <span class="toast-message">${message}</span>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.animation = 'toastIn 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
 let alertRules = [];
 let editingAlertRuleId = null;
 
@@ -126,14 +152,14 @@ async function saveAlertRule() {
         if (response.ok) {
             resetAlertRuleForm();
             loadAlertRules();
-            alert(alertRuleId ? 'Đã cập nhật quy tắc!' : 'Đã tạo quy tắc mới!');
+            showToast('success', alertRuleId ? 'Đã cập nhật quy tắc!' : 'Đã tạo quy tắc mới!');
         } else {
             const error = await response.json();
-            alert(`Lỗi: ${error.detail || 'Không thể lưu quy tắc'}`);
+            showToast('error', `Lỗi: ${error.detail || 'Không thể lưu quy tắc'}`);
         }
     } catch (error) {
         console.error('Error saving alert rule:', error);
-        alert('Lỗi khi lưu quy tắc');
+        showToast('error', 'Lỗi khi lưu quy tắc');
     }
 }
 
@@ -176,13 +202,13 @@ async function deleteAlertRule(ruleId) {
 
         if (response.ok) {
             loadAlertRules();
-            alert('Đã xóa quy tắc!');
+            showToast('success', 'Đã xóa quy tắc!');
         } else {
-            alert('Lỗi khi xóa quy tắc');
+            showToast('error', 'Lỗi khi xóa quy tắc');
         }
     } catch (error) {
         console.error('Error deleting alert rule:', error);
-        alert('Lỗi khi xóa quy tắc');
+        showToast('error', 'Lỗi khi xóa quy tắc');
     }
 }
 
