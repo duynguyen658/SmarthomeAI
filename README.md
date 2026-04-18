@@ -124,15 +124,19 @@ Four-tier memory system for AI agents:
 - Preference extraction and storage
 - Conversation history tracking
 
-### AI Multi-Agent System
+### AI Agent System
 
-Built with Google ADK and Gemini 2.5 Flash:
+Built with **Ollama + Mistral** (local AI):
 
-1. **Host Agent** - Central coordinator, routes requests
-2. **Home Assistant Agent** - Device control specialist
-3. **Chef Agent** - Recipe and cooking suggestions
-4. **Weather Agent** - Weather information
-5. **Data Query Agent** - ThingsBoard sensor data
+- **100% Offline**: No internet required, no API key needed
+- **Private**: All data processed locally on your machine
+- **Fast**: Quick responses, no cloud latency dependency
+- **Features**:
+  - Device control (lights, fans, relays...)
+  - Device status checking
+  - Sensor data reading (temperature, humidity, gas)
+  - Weather information
+  - Emotional conversation, user interaction
 
 ### Voice Control
 
@@ -185,15 +189,10 @@ Built with Google ADK and Gemini 2.5 Flash:
 │              └────────┬────────┘                       │
 │                       │                                │
 │                       ▼                                │
-│              ┌────────────────┐                        │
-│              │    Memory AI   │                        │
-│              │  Qdrant + Redis│                        │
-│              └────────┬───────┘                        │
-│                       │                                │
-│                       ▼                                │
 │              ┌─────────────────┐                       │
-│              │   AI Agents     │                       │
-│              │  (Gemini ADK)   │                       │
+│              │    AI Agent     │                       │
+│              │  Ollama+Mistral │                       │
+│              │    (Local AI)   │                       │
 │              └─────────────────┘                       │
 └────────────────────────────────────────────────────────┘
                          │
@@ -410,7 +409,7 @@ Send message to AI agent:
 
 ```json
 {
-  "query": "Bật đèn phòng khách",
+  "query": "Turn on living room lights",
   "user_id": "user_123",
   "session_id": "session_001"
 }
@@ -419,7 +418,7 @@ Send message to AI agent:
 **Response:**
 ```json
 {
-  "response": "Đã gửi lệnh bật đèn tại phòng khách.",
+  "response": "Light at living room has been turned on.",
   "user_id": "user_123",
   "session_id": "session_001"
 }
@@ -617,12 +616,12 @@ SmartHome_AiMutilAgent/
 | Python | 3.10+ | Runtime |
 | FastAPI | >=0.104.0 | REST API framework |
 | Uvicorn | >=0.24.0 | ASGI server |
-| Google ADK | >=0.1.0 | Multi-agent framework |
-| Gemini 2.5 Flash | - | LLM model |
+| Ollama | latest | Local AI runtime |
+| Mistral | latest | LLM model (local, private) |
 | SQLAlchemy | >=2.0.0 | ORM |
 | PostgreSQL | 12+ | Primary database |
 | Redis | 5+ | State store & cache |
-| Qdrant | 1.7+ | Vector database |
+| Qdrant | 1.7+ | Vector database (optional) |
 
 ### IoT & Messaging
 | Technology | Purpose |
